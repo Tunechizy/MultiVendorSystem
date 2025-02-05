@@ -1,0 +1,80 @@
+/* Container for the entire authentication section */
+.auth-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  border: 1px solid #c8c8c8;
+  max-width: 450px;
+  margin: 30px auto;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading style within the form container */
+.auth-section h2 {
+  font-size: 28px;
+  color: #222222;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Basic form layout */
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input fields styling */
+.auth-form input {
+  margin-bottom: 18px;
+  padding: 12px;
+  font-size: 18px;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+/* Focus effect for inputs */
+.auth-form input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 4px rgba(52, 152, 219, 0.6);
+}
+
+/* Button style */
+.auth-form button {
+  padding: 12px 18px;
+  font-size: 18px;
+  color: #ffffff;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the submit button */
+.auth-form button:hover {
+  background-color: #2980b9;
+}
+
+/* Styling for links like "Forgot Password" or "Sign up" */
+.auth-link {
+  font-size: 16px;
+  color: #8e44ad;
+  /* Purple link color */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Hover effect for the links */
+.auth-link:hover {
+  color: #5e3370;
+  /* Darker purple on hover */
+  text-decoration: none;
+}

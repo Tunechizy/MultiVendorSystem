@@ -1,0 +1,70 @@
+/* App container */
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  /* Light background */
+}
+
+/* Logo styling */
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+  /* Prevent interaction with the logo */
+  transition: transform 0.3s ease-in-out;
+  /* Add transition effect */
+}
+
+/* Conditional animation for logo */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    /* Infinite spinning animation */
+  }
+}
+
+/* Header section styling */
+.App-header {
+  background-color: #1a1a1a;
+  /* Darker background */
+  width: 100%;
+  min-height: 25vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5vw;
+  /* Responsive font size */
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* Hyperlink styling */
+.App-link {
+  color: #61dafb;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/* Hover effect for the link */
+.App-link:hover {
+  color: #21a1f1;
+  /* Slightly darker blue */
+}
+
+/* Spinning animation keyframes */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

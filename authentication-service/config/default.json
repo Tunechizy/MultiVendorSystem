@@ -1,0 +1,6 @@
+{
+    "jwtSecret": "your_super_secret_key",
+    "mongoURI": "your_mongodb_connection_string",
+    "redisHost": "127.0.0.1",
+    "redisPort": 6379
+}

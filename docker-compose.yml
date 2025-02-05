@@ -1,0 +1,53 @@
+services:
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: rabbitmq
+    ports:
+      - "15672:15672" # RabbitMQ UI
+      - "5672:5672" # AMQP protocol
+
+  mongodb:
+    image: "mongo"
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  authentication-service:
+    build: ./authentication-service
+    container_name: authentication-service
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/authdb
+      - JWT_SECRET=your_secret_key
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    depends_on:
+      - rabbitmq
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/orderdb
+      - RABBITMQ_HOST=rabbitmq
+
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/productdb
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+volumes:
+  mongo_data:

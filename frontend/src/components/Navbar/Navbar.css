@@ -1,0 +1,42 @@
+/* Navbar styling */
+.navbar {
+  background-color: #3498db;
+  /* Changed primary color */
+  padding: 35px 25px;
+  /* Adjusted padding for better spacing */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #2980b9;
+  /* Added bottom border for distinction */
+}
+
+/* Styling the list of menu items */
+.navbar-menu {
+  list-style: none;
+  /* Removed default list style */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px;
+  /* Spacing between the menu items */
+}
+
+/* Individual menu items */
+.navbar-menu li {
+  cursor: pointer;
+  color: #ffffff;
+  /* Text color */
+  font-size: 36px;
+  /* Slightly smaller font size */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+  /* Smooth transitions */
+}
+
+/* Hover effect for menu items */
+.navbar-menu li:hover {
+  color: #ecf0f1;
+  /* Lighter color on hover */
+  text-decoration: underline;
+  /* Underline on hover */
+}
