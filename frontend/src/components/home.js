@@ -4,42 +4,53 @@ import ProductCard from "./card"; // Import the ProductCard component for displa
 import { Container, Row, Col } from "react-bootstrap"; // Import Bootstrap components for layout
 import { Navigate } from "react-router-dom"; // For redirection if the user is not logged in
 import "./ProductCard.css"; // Import the styles for the product cards
+import { useCart } from "../context/CartContext";
+import { useProducts } from '../context/ProductContext';
 
 const Homepage = ({ user }) => {
   // State hooks to manage the product data, loading state, error state, and search text
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState(""); // To track the text entered in the search bar
+  const { addToCart } = useCart();
+  const { products: sellerProducts } = useProducts();
+  const [allProducts, setAllProducts] = useState([]);
 
   // useEffect hook that runs on component mount or whenever 'user' changes
   useEffect(() => {
     // Fetch products from the server
     const fetchProducts = async () => {
       try {
-        // Send a GET request to fetch products from the backend API
-        const response = await axios.get("http://localhost:5001/product/");
+        console.log('Fetching products...'); // Debug log
+        // Get API products
+        const response = await axios.get("http://localhost:5001/api/products");
+        const apiProducts = Array.isArray(response.data) ? response.data : [];
+        
+        // Combine API products with seller products
+        const combinedProducts = [
+          ...apiProducts,
+          ...sellerProducts
+        ].map(product => ({
+          ...product,
+          stock_quantity: product.stock_quantity || 10 // Default stock quantity for API products
+        }));
 
-        // Check if the response data is in the correct format (array of products)
-        if (Array.isArray(response.data)) {
-          setProducts(response.data); // Store the products in state
-        } else {
-          throw new Error("Invalid data format"); // If the data is not in the expected format, throw an error
-        }
+        setAllProducts(combinedProducts);
       } catch (err) {
-        // If there's an error, set the error state with the error message
-        setError(err.message || "Failed to fetch products");
+        console.error("Error details:", {
+          message: err.message,
+          response: err.response,
+          request: err.request
+        });
+        setError(err.response?.data?.error || err.message || "Failed to fetch products");
       } finally {
-        // Once the request completes (success or failure), set loading to false
         setLoading(false);
       }
     };
 
-    // Only fetch products if the user is logged in
-    if (user) {
-      fetchProducts();
-    }
-  }, [user]); // Dependency array - re-run the effect when 'user' changes
+    // Remove the user check to always fetch products
+    fetchProducts();
+  }, [sellerProducts]); // Add sellerProducts as dependency
 
   // If the user is not authenticated, redirect them to the login page
   // if (!user) {
@@ -62,7 +73,7 @@ const Homepage = ({ user }) => {
   }
 
   // Filter the products based on the search text entered by the user
-  const filteredProducts = products.filter((product) =>
+  const filteredProducts = allProducts.filter((product) =>
     product.title.toLowerCase().includes(searchText.toLowerCase()) // Case-insensitive search
   );
 
@@ -87,8 +98,11 @@ const Homepage = ({ user }) => {
         <Row>
           {filteredProducts.map((product) => (
             // For each product, render the ProductCard component
-            <Col key={product.product_id} sm={12} md={6} lg={4}>
-              <ProductCard product={product} />
+            <Col key={product._id} sm={12} md={6} lg={4}>
+              <ProductCard 
+                product={product} 
+                onAddToCart={addToCart}
+              />
             </Col>
           ))}
         </Row>

@@ -29,19 +29,108 @@
 
 /* Header section styling */
 .App-header {
-  background-color: #1a1a1a;
-  /* Darker background */
+  background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
-  min-height: 25vh;
+  height: 400px;
+  position: relative;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2.5vw;
-  /* Responsive font size */
+}
+
+/* Dark overlay for better text readability */
+.App-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+/* Header content container */
+.header-content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
   color: white;
-  padding: 20px 0;
   text-align: center;
+}
+
+/* Site title styling */
+.site-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 1s ease-out;
+}
+
+/* Site subtitle styling */
+.site-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .App-header {
+    height: 300px;
+  }
+
+  .site-title {
+    font-size: 2.5rem;
+  }
+
+  .site-subtitle {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header {
+    height: 250px;
+  }
+
+  .site-title {
+    font-size: 2rem;
+  }
+
+  .site-subtitle {
+    font-size: 1rem;
+  }
 }
 
 /* Hyperlink styling */
@@ -67,4 +156,19 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.add-product-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.add-product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }

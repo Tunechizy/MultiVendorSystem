@@ -86,3 +86,47 @@
     /* Adjust card width for very small screens */
   }
 }
+
+.search-bar {
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-bar input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.error-message {
+    text-align: center;
+    color: #e74c3c;
+    padding: 20px;
+}
+
+.no-products-message {
+    text-align: center;
+    color: #7f8c8d;
+    margin-top: 50px;
+}
+
+.container {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .search-bar input {
+        max-width: 90%;
+    }
+}

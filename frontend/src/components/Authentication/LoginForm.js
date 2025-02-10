@@ -1,65 +1,94 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSeller } from '../../context/SellerContext';
+import './Auth.css';
 
-const LoginForm = ({ onLoginSuccess }) => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+const LoginForm = () => {
+  const [formInputs, setFormInputs] = useState({
+    email: '',
+    password: ''
   });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { loginAsSeller } = useSeller();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
 
-    try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
-      const { token, refreshToken } = response.data;
-
-      // Store tokens in localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("refreshToken", refreshToken);
-
-      onLoginSuccess(); // Callback to handle successful login
-    } catch (err) {
-      setError(err.response?.data?.error || "Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+    // Check if it's a seller login
+    if (loginAsSeller(formInputs.email, formInputs.password)) {
+      navigate('/seller/home');
+      return;
     }
+
+    // Regular user login
+    setTimeout(() => {
+      setLoading(false);
+      navigate('/home');
+    }, 1000);
   };
 
   return (
-    <div className="login-form">
-      <h2>Login</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username or Email"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+    <div className="auth-container">
+      <div className="auth-form-container">
+        <div className="auth-header">
+          <h2>Welcome Back</h2>
+          <p>Sign in to continue shopping</p>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={formInputs.email}
+              onChange={(e) => setFormInputs({ ...formInputs, email: e.target.value })}
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={formInputs.password}
+              onChange={(e) => setFormInputs({ ...formInputs, password: e.target.value })}
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            className="auth-button"
+            disabled={loading}
+          >
+            {loading ? 'Signing In...' : 'Sign In'}
+          </button>
+        </form>
+
+        <div className="auth-alternatives">
+          <p>
+            Don't have an account?{' '}
+            <a href="/signup" className="auth-link">
+              Sign Up
+            </a>
+          </p>
+          <p>
+            <a href="/home" className="auth-link">
+              Continue as Guest
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

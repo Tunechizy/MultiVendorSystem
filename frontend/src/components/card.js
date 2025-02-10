@@ -1,18 +1,37 @@
-import React from 'react';
-import { Card, Button } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
+import React, { useState } from 'react';
+import { Card, Button, Toast } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
+import { useSeller } from '../context/SellerContext';
+import { useLocation } from 'react-router-dom';
 import './ProductCard.css'; // Import custom CSS for styling
 
 // Functional component to display a product card
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onAddToCart }) => {
+  const [showToast, setShowToast] = useState(false);
+  const { isSeller } = useSeller();
+  const location = useLocation();
+
+  const handleAddToCart = () => {
+    onAddToCart(product);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
+
+  const isOutOfStock = !product.stock_quantity || product.stock_quantity <= 0;
+  const isSellerPage = location.pathname.includes('/seller');
+
   return (
     <div className="product-card">
       <Card>
         {/* Image with a fallback to a placeholder if the product image is unavailable */}
         <Card.Img
           variant="top"
-          src={product.image || "https://via.placeholder.com/150"} // Fallback image URL if no image is provided
-          alt={product.title || "Product image"} // Fallback alt text if product title is unavailable
+          src={product.imageUrl} // Changed from product.image to product.imageUrl
+          alt={product.title}
           className="product-image" // Custom class for styling the image
+          onError={(e) => {
+            e.target.onerror = null; // Prevent infinite loop
+            e.target.src = "https://placehold.co/400x400/png?text=Image+Not+Found";
+          }}
         />
         <Card.Body className="card-body">
           {/* Display the product title with a fallback value */}
@@ -28,20 +47,38 @@ const ProductCard = ({ product }) => {
 
           {/* Display stock availability, with fallback if the quantity is not provided */}
           <Card.Text>
-            <small>
-              Stock: {product.stock_quantity || "Out of stock"} available
+            <small className={isOutOfStock ? 'text-danger' : 'text-success'}>
+              {isOutOfStock ? 'Out of stock' : `${product.stock_quantity} available`}
             </small>
           </Card.Text>
 
-          {/* Add to Cart button with an onClick event handler */}
-          <Button
-            variant="primary"
-            onClick={() => console.log(`Product "${product.title}" added to cart!`)} // Placeholder action for adding to cart
-          >
-            Add to Cart
-          </Button>
+          {!isSellerPage && (
+            <Button
+              variant="primary"
+              onClick={handleAddToCart}
+              className="add-to-cart-btn"
+              disabled={isOutOfStock}
+            >
+              {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+            </Button>
+          )}
         </Card.Body>
       </Card>
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        style={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          zIndex: 1000
+        }}
+      >
+        <Toast.Header>
+          <strong className="me-auto">Added to Cart</strong>
+        </Toast.Header>
+        <Toast.Body>{product.title} has been added to your cart!</Toast.Body>
+      </Toast>
     </div>
   );
 };

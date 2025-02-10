@@ -1,156 +1,27 @@
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { Routes, Route, Navigate } from 'react-router-dom'; // Import Routes and Route (no need for BrowserRouter here)
-// import './App.css';
-// import './components/Authentication/Auth.css';
-// import './components/Navbar/Navbar.css';
-// import LoginForm from './components/Authentication/LoginForm';
-// import SignupForm from './components/Authentication/SignupForm';
-// import Navbar from './components/Navbar/Navbar';
-// import Homepage from './components/home';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
-// function App() {
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     const token = localStorage.getItem('authToken');
-//     const email = localStorage.getItem('userEmail');
-//     if (token && email) {
-//       setUser({ email });
-//     }
-//   }, []);
-
-//   const handleLogout = () => {
-//     localStorage.removeItem('authToken');
-//     localStorage.removeItem('userEmail');
-//     setUser(null);
-//   };
-
-//   return (
-//     <div className="App">
-//       <Navbar user={user} handleLogout={handleLogout} />
-//       <header className="App-header">
-//         <h1>Multi-Vendor Platform</h1>
-//       </header>
-//       <main>
-//         <Routes>
-//         <Route path="/" element={<LoginForm />} />
-
-//           {/* Login page */}
-//           <Route path="/login" element={user ? <Navigate to="/home" /> : <LoginForm setUser={setUser} />} />
-
-//           {/* Signup page */}
-//           <Route path="/signup" element={<SignupForm />} />
-
-//           {/* Home page, accessible only if the user is logged in */}
-//           <Route path="/home" element={user ? <Homepage user={user} /> : <Navigate to="/login" />} />
-//         </Routes>
-//       </main>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { Routes, Route, Navigate } from 'react-router-dom';
-// import './App.css';
-// import './components/Authentication/Auth.css';
-// import './components/Navbar/Navbar.css';
-// import LoginForm from './components/Authentication/LoginForm';
-// import SignupForm from './components/Authentication/SignupForm';
-// import Navbar from './components/Navbar/Navbar';
-// import Homepage from './components/home';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
-// function App() {
-//   const [user, setUser] = useState(null);
-
-//   // UseEffect only runs once when the component mounts
-//   useEffect(() => {
-//     const token = localStorage.getItem('authToken');
-//     const email = localStorage.getItem('userEmail');
-
-//     // Set user state only if the token and email are available
-//     if (token && email) {
-//       setUser({ email });
-//     }
-//   }, []); // Empty array ensures this runs only once when the component mounts
-
-//   const handleLogout = () => {
-//     localStorage.removeItem('authToken');
-//     localStorage.removeItem('userEmail');
-//     setUser(null);
-//   };
-
-//   return (
-//     <div className="App">
-//       <Navbar user={user} handleLogout={handleLogout} />
-//       <header className="App-header">
-//         <h1>Multi-Vendor Platform</h1>
-//       </header>
-//       <main>
-//         <Routes>
-//           {/* If user is logged in, go to home page, otherwise go to login */}
-//           <Route
-//             path="/"
-//             element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
-//           />
-
-//           {/* Login page */}
-//           <Route
-//             path="/login"
-//             element={user ? <Navigate to="/home" /> : <LoginForm setUser={setUser} />}
-//           />
-
-//           {/* Signup page */}
-//           <Route path="/signup" element={<SignupForm />} />
-
-//           {/* Home page, accessible only if the user is logged in */}
-//           <Route
-//             path="/home"
-//             element={user ? <Homepage user={user} /> : <Navigate to="/login" />}
-//           />
-//         </Routes>
-//       </main>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./components/Authentication/Auth.css";
 import "./components/Navbar/Navbar.css";
 import LoginForm from "./components/Authentication/LoginForm";
 import SignupForm from "./components/Authentication/SignupForm";
-import Navbar from "./components/Navbar/Navbar";
 import Homepage from "./components/home";
+import { CartProvider } from "./context/CartContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cart from './components/Cart/Cart';
+import CartIndicator from './components/CartIndicator/CartIndicator';
+import { ToastContainer } from 'react-toastify';
+import { SellerProvider } from './context/SellerContext';
+import SellerDashboard from './components/Seller/SellerDashboard';
+import SellerHome from './components/Seller/SellerHome';
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { ProductProvider } from './context/ProductContext';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Added a loading state
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -159,50 +30,65 @@ function App() {
     if (token && email) {
       setUser({ email });
     }
-    setLoading(false); // Mark loading as complete
-  }, []); // Empty dependency ensures this runs only once when the component mounts
+    setLoading(false);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userEmail");
     setUser(null);
+    navigate("/login");
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Display a loading message while checking for user state
+    return <div>Loading...</div>;
   }
 
+  const isSeller = user && user.email.endsWith("@seller.com");
+
   return (
-    <div className="App">
-      <Navbar user={user} handleLogout={handleLogout} />
-      <header className="App-header">
-        <h1>Multi-Vendor Platform</h1>
-      </header>
-      <main>
-        <Routes>
-          {/* Root route: Redirect to home if logged in, else to login */}
-          {/* <Route
-            path="/"
-            element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
-          /> */}
-
-          {/* Login page */}
-          {/* <Route
-            path="/login"
-            element={user ? <Navigate to="/home" /> : <LoginForm setUser={setUser} />}
-          /> */}
-
-          <Route path="/login" element={<LoginForm />} />
-
-          {/* Signup page */}
-          <Route path="/signup" element={<SignupForm />} />
-
-          {/* Home page: Accessible only if the user is logged in */}
-          <Route path="/home" element={<Homepage />} />
-
-        </Routes>
-      </main>
-    </div>
+    <ProductProvider>
+      <SellerProvider>
+        <CartProvider>
+          <div className="App">
+            <ToastContainer position="top-right" />
+            {!isSeller && <CartIndicator />}
+            <header className="App-header">
+              <div className="header-content">
+                <h1 className="site-title">Pop Shop</h1>
+                <p className="site-subtitle">Your One-Stop Shopping Destination</p>
+                <Button 
+                  variant="outline-light" 
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+                {isSeller && (
+                  <Button 
+                    variant="outline-light" 
+                    onClick={() => navigate('/seller/dashboard')}
+                    className="add-product-btn"
+                  >
+                    Add Product
+                  </Button>
+                )}
+              </div>
+            </header>
+            <main>
+              <Routes>
+                <Route path="/" element={<SignupForm />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/signup" element={<SignupForm />} />
+                <Route path="/home" element={<Homepage />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/seller/dashboard" element={<SellerDashboard />} />
+                <Route path="/seller/home" element={<SellerHome />} />
+              </Routes>
+            </main>
+          </div>
+        </CartProvider>
+      </SellerProvider>
+    </ProductProvider>
   );
 }
 

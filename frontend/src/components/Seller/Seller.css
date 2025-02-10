@@ -1,0 +1,24 @@
+.seller-dashboard {
+  padding: 20px;
+}
+
+.seller-dashboard h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.product-form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.product-list {
+  margin-top: 20px;
+}
+
+.product-card {
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+} 

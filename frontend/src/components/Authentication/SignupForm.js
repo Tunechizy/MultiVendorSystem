@@ -8,71 +8,119 @@ const Signup = () => {
     username: '',
     email: '',
     password: '',
-    role: 'buyer', // Default role is buyer
+    confirmPassword: ''
   });
-
-  const [errorMsg, setErrorMsg] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const updateInput = (event) => {
-    const { name, value } = event.target;
-    setFormInputs({ ...formInputs, [name]: value });
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-  const onFormSubmit = async (event) => {
-    event.preventDefault();
+    // Password validation
+    if (formInputs.password !== formInputs.confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', formInputs);
-      console.log('User signed up:', response.data);
-      navigate('/home');
-    } catch (error) {
-      console.error('Signup error:', error);
-      setErrorMsg(error.response?.data?.error || 'Signup failed. Try again.');
+      const response = await axios.post('http://localhost:5000/api/auth/register', {
+        username: formInputs.username,
+        email: formInputs.email,
+        password: formInputs.password
+      });
+
+      if (response.status === 201) {
+        navigate('/home');
+      }
+
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to register');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-container">
-      <h2>Register</h2>
-      <form className="auth-form" onSubmit={onFormSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formInputs.username}
-          onChange={updateInput}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="email"
-          value={formInputs.email}
-          onChange={updateInput}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formInputs.password}
-          onChange={updateInput}
-          required
-        />
-        <select name="role" value={formInputs.role} onChange={updateInput} required>
-          <option value="buyer">Buyer</option>
-          <option value="seller">Seller</option>
-        </select>
-        <button type="submit">Sign Up</button>
-      </form>
-      {errorMsg && <p className="error">{errorMsg}</p>}
-      <p>
-        Already have an account?{' '}
-        <span className="link" onClick={() => navigate('/home')}>
-          Login
-        </span>
-      </p>
+      <div className="auth-form-container">
+        <div className="auth-header">
+          <h2>Create Account</h2>
+          <p>Join our community and start shopping</p>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              value={formInputs.username}
+              onChange={(e) => setFormInputs({ ...formInputs, username: e.target.value })}
+              required
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={formInputs.email}
+              onChange={(e) => setFormInputs({ ...formInputs, email: e.target.value })}
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={formInputs.password}
+              onChange={(e) => setFormInputs({ ...formInputs, password: e.target.value })}
+              required
+              placeholder="Create a password"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={formInputs.confirmPassword}
+              onChange={(e) => setFormInputs({ ...formInputs, confirmPassword: e.target.value })}
+              required
+              placeholder="Confirm your password"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            className="auth-button"
+            disabled={loading}
+          >
+            {loading ? 'Creating Account...' : 'Sign Up'}
+          </button>
+        </form>
+
+        <div className="auth-alternatives">
+          <p>
+            Already have an account?{' '}
+            <a href="/login" className="auth-link">
+              Log In
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

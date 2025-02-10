@@ -1,80 +1,150 @@
-/* Container for the entire authentication section */
-.auth-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 25px;
-  background-color: #e0e0e0;
-  border-radius: 12px;
-  border: 1px solid #c8c8c8;
-  max-width: 450px;
-  margin: 30px auto;
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+/* Main authentication container */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
 }
 
-/* Heading style within the form container */
-.auth-section h2 {
-  font-size: 28px;
-  color: #222222;
-  margin-bottom: 25px;
-  text-align: center;
+/* Auth form wrapper */
+.auth-form-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    position: relative;
 }
 
-/* Basic form layout */
-.auth-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+/* Form header */
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-/* Input fields styling */
-.auth-form input {
-  margin-bottom: 18px;
-  padding: 12px;
-  font-size: 18px;
-  border: 1px solid #d1d1d1;
-  border-radius: 5px;
-  width: 100%;
-  box-sizing: border-box;
-  outline: none;
+.auth-header h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: 600;
 }
 
-/* Focus effect for inputs */
-.auth-form input:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 4px rgba(52, 152, 219, 0.6);
+.auth-header p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
 }
 
-/* Button style */
-.auth-form button {
-  padding: 12px 18px;
-  font-size: 18px;
-  color: #ffffff;
-  background-color: #3498db;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+/* Form group styling */
+.form-group {
+    margin-bottom: 20px;
 }
 
-/* Hover effect for the submit button */
-.auth-form button:hover {
-  background-color: #2980b9;
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #34495e;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-/* Styling for links like "Forgot Password" or "Sign up" */
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Submit button */
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.auth-button:hover {
+    background: #2980b9;
+}
+
+.auth-button:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+}
+
+/* Alternative auth options */
+.auth-alternatives {
+    margin-top: 25px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
 .auth-link {
-  font-size: 16px;
-  color: #8e44ad;
-  /* Purple link color */
-  text-decoration: underline;
-  cursor: pointer;
+    color: #3498db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
 }
 
-/* Hover effect for the links */
 .auth-link:hover {
-  color: #5e3370;
-  /* Darker purple on hover */
-  text-decoration: none;
+    color: #2980b9;
+}
+
+/* Error message styling */
+.error-message {
+    background: #fee;
+    color: #e74c3c;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Success message styling */
+.success-message {
+    background: #e8f8f5;
+    color: #27ae60;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .auth-form-container {
+        padding: 25px;
+    }
+
+    .auth-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .form-group input {
+        padding: 10px 12px;
+    }
+
+    .auth-button {
+        padding: 12px;
+    }
 }
