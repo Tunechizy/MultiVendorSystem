@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // Import and use authentication routes
-const authRoutes = require('./Routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
 // Connect to MongoDB (ensure your Mongo URI is in .env)
@@ -33,8 +33,14 @@ mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+    .then(() => console.log('MongoDB connected successfully'))
+    .catch(err => {
+        console.error('MongoDB connection error details:', {
+            message: err.message,
+            code: err.code,
+            errorResponse: err.errorResponse
+        });
+    });
 
 
 
@@ -46,7 +52,7 @@ app.use((err, req, res, next) => {
 });
 
 // Port setup and server start
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Authentication service running on port ${PORT}`);
 });
